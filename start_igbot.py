@@ -9,13 +9,14 @@ def main():
 	parser.add_argument('username', type=str, help='IG Username')
 	parser.add_argument('password', type=str, help='IG Password')
 	parser.add_argument('hashtag', type=str, help='Hashtag')
+	parser.add_argument('humanizer', type=bool, nargs='?', const=True, help='Sim. human behaviour (True/False)')
 	arguments = parser.parse_args()
 
-	instabot = Instagram_bot(arguments.username, arguments.password)
+	instabot = Instagram_bot(arguments.username, arguments.password, arguments.humanizer)
 
 	instabot.login()
 	try:
-		instabot.like_photo(arguments.hashtag)
+		instabot.like_photo(arguments.hashtag, arguments.humanizer)
 
 	except(NoSuchWindowException, WebDriverException) as prematurely_closed:
 		print("Program has been prematurely closed!")
