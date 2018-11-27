@@ -12,7 +12,7 @@
 
 This little program opens your firefox browser autonomously - searches for the disered hashtag you entered and then proceeds to like those 
 pictures for you. This will go on until you close the browser.
-This is of course not as efficent as working with the instagram api - but it is better in avoiding shadowblocking (especialy with the
+This is of course not as efficent as working with the instagram api - but it is better in avoiding shadowbans (especialy with the
 humanizer option running).
 
 **How do I run it?**
