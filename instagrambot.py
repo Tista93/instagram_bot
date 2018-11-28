@@ -5,15 +5,13 @@ from numpy import random
 import time
 
 
-
-class Instagram_bot:
+class Instagram_Bot:
 	"""LIKE ALL THE PUPPIES!!!!"""
 
-	def __init__(self, username, password, humanizer):
+	def __init__(self, username, password):
 		self.username = username
 		self.password = password
 		self.driver = webdriver.Firefox()
-		self.humanizer = humanizer
 
 	def close_browser(self):
 		"""close browser"""
@@ -34,8 +32,8 @@ class Instagram_bot:
 		password_elem.send_keys(Keys.RETURN)
 		time.sleep(3)
 
-	def like_photo(self, hashtag, humanizer):
-		"""like a picture"""
+	def navigate_photos(self, hashtag, humanizer, comment):
+		"""opens the pictures of a given hashtag and performs wanted actions"""
 		driver = self.driver
 		driver.get("https://www.instagram.com/explore/tags/" + hashtag + "/")
 		time.sleep(3)
@@ -56,32 +54,41 @@ class Instagram_bot:
 			driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
 			if humanizer:
+				print("Ran humanizer")
 				if random.choice([True, False], p=(0.65, 0.35)):
 					time.sleep(random.choice(list(range(2, 5))))
-					self.click_like(driver)
+					self.like_and_comment(driver, comment)
 					# sleep time of 18 results in aprox. 200 Likes per hour
-					time.sleep(random.choice(list(range(3, 20))))
-					#time.sleep(5)
+					time.sleep(random.choice(list(range(1, 5))))
 
+				# skip a picture
 				else:
 					time.sleep(random.choice(list(range(3, 20))))
-					#time.sleep(5)
 					continue
 
 			else:
 				time.sleep(2)
-				self.click_like(driver)
+				self.like_and_comment(driver, comment)
 				time.sleep(5)
 
 	@staticmethod
-	def click_like(driver):
-		"""finds like button, clicks it, skips already liked pictures"""
+	def like_and_comment(driver, comment):
+		"""find and click likebutton, skip if already liked, comment if comment"""
 		try:
 			# only looks for pictures that arent already liked by your account
 			like = driver.find_element_by_css_selector('.glyphsSpriteHeart__outline__24__grey_9.u-__7')
 			like.click()
 
-		# Element can't be found if already liked
+			if comment:
+				time.wait(2)
+				commentfield = driver.find_element_by_class_name('Ypffh')
+				commentfield.click()
+				commentfield = driver.find_element_by_class_name('Ypffh')
+				commentfield.send_keys(comment)
+				commentfield.send_keys(Keys.RETURN)
+
+		# Element can't be found if already liked so skip it
 		except NoSuchElementException as alreadyliked:
 			pass
+
 
